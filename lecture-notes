@@ -1,0 +1,440 @@
+6.000 - Introduction to Computation and Programming
+https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00sc-introduction-to-computer-science-and-programming-spring-2011/
+
+Requirements to Complete
+Skim Lecture Notes/Slides/Handouts and take notes
+	*Intro to 6.00
+	*Core Elements of a Program
+	*Problem Solving
+	*Machine Intepretation of a Program
+	*Objects in Python
+	*Recursion
+	*Debugging
+	*Memory and Search Methods
+	*Hashing and Classes
+	*OOP and Inheritance
+	*Introduction to Simulation and Random Walks
+	*Some Basic Probability and Plotting Data
+	*Sampling and Monte Carlo Simulation
+	*Statistical Thinking
+	*Using Randomness to Solve Non-Random Problems
+	*Curve Fitting
+	*More Optimization and Clustering
+Skim/Do Problem Sets, add code to GitHub
+Watch Lectures
+	*Efficiency and Order of Growth
+	*Optimization Problems and Algorithms
+	*Graphs to Model Problems, part I
+	*Graphs to Model Problems, part II
+	*Dynamic Programming
+Do problem set 11
+
+Notes
+	Lecture 1 - Intro to 6.00
+		Strategic goals of the course
+			Prep for 6.01
+			Feel comfortable writing small/medium programs
+			Converting real world/scientific problems into computational problems
+			Problem sets should adequately prepare for quizzes, if not, it's open book open note
+		Evolution from fixed use computers to stored program computers
+		Extremely interesting, but not totally useful for my purpose
+		No problem sets
+	Lecture 2 - Core Elements of a Program
+		Problem Set
+			Install Python
+			Write a program that
+				Asks the user for their birthday
+				Asks the user for their last name
+				Prints the user's last name and birthday, in that order
+			Problem is trivial, unnecessary to complete
+	Lecture 3 - Problem Solving
+		Discusses terminating programs (returns either exception or a value)
+		Discusses decrementing functions, exhaustive enumeration or for loops
+		At the end of this lecture, the professor challenged the students to find the cases where the program he wrote during the lecture failed at its task.
+		No problem sets
+	Lecture 4 - Machine Intepretation of a Program
+		Decomposition, module, function, abstraction, formal parameter, actual parameter, argument, assert, scope, mapping, stack, last in first out, LIFO, strings, slicing
+		Problem Set - Paying off Credit Card Debt
+	Lecture 5 - Objects in Python
+		No Problems Sets
+		Readings
+			How to think like a Computer Scientist Chapter 8: Lists
+				This made me look up range vs. xrange, range returns a list, xrange is a generator yielding the same values (slightly more mem efficient)
+				Negative indices count backwards from end of list
+				Loops start at 0 and run on every value except the final stated, add one to be inclusive
+				Multiply a list by an integer to return a list with the values repeated
+				Update several elements at once with the slice operator
+					Ex: [2:4] = 'bradshaw', 'cole'
+					With list comprehension: lst[3:7] = [c for c in 'ange']
+					Remove elements: lst[3:7] = []
+					Insert multiple elements: lst[3:3] = [c for c in 'ange']
+				Two variables refer to the same object, they are aliased
+				Changing one alias changes the other
+				Empty slice operator clones a list: lstb = lsta[:], avoids aliasing
+				Lists passed as parameters are aliases, or "passed by reference", not clones
+					A good reason why functions shouldn't change parameters, clone them if necessary
+				Lists returned are references too, so if the list was passed as a parameter, the function returns an alias to the previous list
+			How to think like a Computer Scientist Chapter 9: Tuples
+				Tuples are immutable
+				Parenthesis not required: tpl = 1, 2, 3, 4, 5
+				Parenthesis are required for string formatting 'The %s car goes %s mpg' % ('blue', 80)
+				Tuple assignment removes need for temp variables in a swap
+					temp = a
+					a = b
+					b = temp
+				becomes
+					a, b = b, a
+				So you could swap a dozen elements in one line
+					a, b, c, d, e, f, g, h = h, g, f, e, d, c, b, a
+			How to think like a Computer Scientist Chapter 10: Dictionaries
+				Dictionaries are mutable, so be sure to use the copy method to make clones
+				Use tuples as keys to represent a matrix, good for sparse matrices
+					sparse_matrix = {(3,5): 1, (6,1): 21, (7,6): 13}
+					print sparse_matrix[6,1]
+					>> 21
+					print sparse_matrix[4,8]
+					>> KeyError: (4, 8)
+					print sparse_matrix.get((4,8), 0)
+					>> 0
+			Python Docs: More on Lists
+				use list.append and list.pop to use a list like a stack
+				use list.append and list.popleft to use a list like a queue
+				multi-variable list comprehensions [(x,y) for x in [1,2,3] for y in [4,5,6] if x * y != 18]
+	Lecture 6: Recursion
+		Mostly talks about recursive problems, base case, fibonacci
+		Problem Set - Recursively solving a polynomial
+	Lecture 7: Debugging
+		Grace Hopper pulled a moth out of a big mainframe, first program debugging
+		Use print statements to help debug problems
+		Problem Set - implement a word game
+			Most code is written already
+			Unit tests are provided
+			The problem set is to fill in some given functions so they pass a test
+			The function algorithms are trivial, so I'll be skipping this one
+	Lecture 8: Efficiency and Order of Growth (Computational Complexity)
+		Watched Full Lecture
+		Lecture Notes:
+			Efficiency is about choosing the right algorithm
+			When confronted with a problem, reduce it to previously solved problem
+			Balancing space & time
+				Faster program uses more memory
+				Memory efficient program goes slower
+			Measuring algorithm speed
+				Time is no good
+					Changes with computer power available
+					Changes with software enviornment (e.g. python version, standard vs. pypy)
+					Vastly different with different inputs
+				Instead, count number of basic steps
+					T: N->R
+					Given input of size N, how many computational steps R will be taken to compute input N?
+					A step is an operation that takes constant time
+					Steps are not variable, but constant
+				Random Access Machine
+					Sets constraints for analyzing algorithm efficiency
+					Instructions are sequential, one at a time
+					Any memory register can be accessed in constant time, e.g. register 0 and register 10,000,000 take same time to access
+						Not totally accurate because of hierchal caching in modern computers, but serves for theoretical efficency measuring
+				Best Case - minimum running time over all possible inputs e.g. linear searching a string and what you're looking for is in first position
+				Worst Case - maximum running time over all possible inputs e.g. linear searching a string and what you're looking for isn't there
+				Expected/Average Case - Most likely running time, most common running time
+				Best case is useless, expected is too hard to predict, so always make the worst case scenario good enough
+				Calculating Steps of a factorial
+					def f(n):
+    				    assert n >= 0     #1 step
+    				    answer = 1        #1 step
+    					while n > 1:	  #1 step in loop n times
+        					answer *= n   #1 step in loop n times
+        					n -= 1        #1 step in loop n times
+    					return answer	  #1 step
+					2 steps + 3 steps * n loops + 1 step OR 2 + 3 * n + 1
+					n = 3000, 9003 steps
+					n = 10000, 10,003 steps
+					The three additive constant steps (lines 2,3 and 7) are inconsequential for big values of n
+					When calculating worst case, how does the running time grow with the size of the input?
+					So a better calculation is 3 * n
+					But the difference between 3000 or 9000 when figuring worst case scenario is not important, not a difference of order of magnitude
+					So multiplicative constants can go too
+					The growth in complexity we're worried about is asymptotic growth, what is the growth of f(x) as x approaches largest possible input?
+					2 + 3 * n + 1 is linear growth
+					3 * n is linear growth
+					n is linear growth
+					So the computational complexity of f(n) is n
+				Big Oh notation
+					f(n) computational complexity is Θ(n)
+					f(x) ∈ Θ(x²) (i.e. f(x) grows no faster than the quadratic polynomial x²)
+					Common usages:
+						Θ(1) - "order 1" constant, independent of input, no growth
+						Θ(log n) - "order log n" logarithmic growth
+						Θ(n) - "order n" linear growth
+						Θ(n log n) - "order n log n" log linear growth
+						Θ(n^c) - "order n to the c", c is a constant, polynomial growth
+						Θ(c^n) - "order c to the n", exponential to the size of the input
+					Best practices
+						Avoid Θ(n^c) and Θ(c^n) altogether
+						The others are in order of growth
+				Calculating factorial recursively
+					def fact(n):
+    					assert n >= 0
+					    if n <= 1:
+					        return n
+					    else:
+					        return n*fact(n - 1)
+					No loops in fact
+					So the steps boil down to how many time fact will be called
+					Fact will be called n times, so complexity is the same
+					Recursion vs. Iteration is not a solved question
+					Might be some overhead in the function call, but can be ignored as a multiplicative constant, doesn't change order of magnitude
+					Recursion vs. Iteration is really about readability and neatness
+				Binary search is Θ(log n) because increase search range by order of magnitude only increases complexity by a small amount
+				Base doesn't matter with Θ(log n), because growth is slower than Θ(n) despite size of n
+	Lecture 9: Memory and Search Methods
+		Indirection is the ability to access something other than the value itself, like a name or a reference
+		Linear search is Θ(len(lst)), can a list be sorted faster than Θ(n)?
+			No, because you can't sort a list without comparing every value at least once
+	Lecture 10: Hasing and Classes
+		Hash functions allow lookups near Θ(1)
+		Hash functions convert a value to an integer (often in different bases, base16, base64)
+		Integers are assigned to buckets, and buckets can hold multiple values
+		Classes are definitions for specific collections of data and functions (called methods) that operate on that data
+		Objects are instances of classes, with data assigned to their members
+		Polymorphism means multiple types(classes) of objects work in the context
+		Problem Set
+			Design functions that will encode and decode messages with a Caesar Cipher, where ' ' is the last character of the alphabet.
+			Write an algorithm that will break a simple Caesar Cipher where the key is unknown
+			Design more functions to add another layer of encryption to different parts of the message to be encoded
+			Write an algorithm that will break the multi-layered Caesar Cipher where the layered keys are unknown
+			Use the algorithm to decrypt the given encrypted file
+			These sound like fun to implement, but I won't learn anything from them. They'll only take time, and I need to be moving on.
+	Lecture 11: OOP and Inheritance
+		What is an instance? Objects based on a defined class
+		What is an abstract data type? A set of objects and functions performed on those objects
+			I'm not a fan of this answer. An abstract data type is really a class that will never be instantiated, but instead helps to describe related classes.
+			In python, it's most often used with a bunch of methods that throw "Not Implemented Error"
+		What is encapsulation? Encapsulation means that names (of variables and methods) are stored in locations that then have to be accessed, called namespaces.
+			Again, I don't like this answer. Encapsulation is a method of restricting access (e.g. public, private) to class members to keep someone from breaking class methods
+			But according to Wikipedia, both of these answers are correct, based on opinion. So the course's answer may be correct in terms of creating getters and setters for class members of varying access.
+		What is data hiding? Data hiding makes certain class members invisible to uses of the object.
+			Ok, ok, so the course decided to stick to one definition of encapsulation, and then renamed the other encapsulation to data hiding
+		What functions can subclasses use? They can use all the functions of the superclass plus any functions defined specifically for the subclass. They can also override the superclass functions. They can also overload the superclass functions.
+	Lecture 12: Introduction to Simulation and Random Walks
+		Simulations enable computations to be performed over a series of steps to model the changes of a real world system
+		Designing a simulation
+			Find probabilities of first few steps in reality
+			Random walk - test the probabilities of the first three steps by hand
+			Example:
+				|_|_|_|_|
+				|_|_|_|_|
+				|_|_*_|_|
+				|_|_|_|_|
+				|_|_|_|_|
+			Distance from origin after one step will always be one, so distance from origin probablity for 1 step is 1
+			Distance from origin for second step will be 
+				0 in 1/4 of cases
+				Root 2 (that is, one diagonal from origin) in 2/4 of cases
+				2 in 1/4 of cases
+				So distance form origin probablity for 2nd step is 0 * 1/4 + root2 * 2/4 + 2 * 1/4 = 1.2
+			3rd step is 1.4 (after a more complex calculation) then 2nd step
+		yield vs. return in python functions
+			return produces a stateless function
+			yield produces a stateful function, keeping local variables in tact
+		Random Functions
+			random.choice
+			random.shuffle
+			random.sample
+		Problem Set
+			The problem set is 10 problems that, sequentially, build and RSS reader.
+			The problem set is about separating the various algorithms to do this work into classes that represent various parts of the reader (feeds, items, entries, triggers, alerts)
+			Again, this looks like a fun problem, but it's trivial for me because designing OO programs is probably one of my more polished skills
+	Lecture 13: Some basic probability and plotting data
+		In the last lecture, it was clear from the random walk simulation that the results the model delivered did not match the probabilities calculated before making the model
+		The reason was sample size, the model would have to be simulated many many times to get a result that reverts to the calculated probabilities
+		This is why computers have been so helpful since the fall of our deterministic models of reality.
+		Newton's work told us that "x will occur", but Bohrs and Heisenberg tell us that's wrong, but rather that "x has a very high probablity of occuring"
+		So now most science is about probabilities, and computer simulated models allow us to understand these probabilities for large sample sizes
+	Lecture 14: Sampling and Monte Carlo Simulation
+		Problem Set - Designing a Roomba-like robot and charting its performance
+			I setup the entire Monte Carlo and tested its output
+			Then I did one graph of the Robots performance
+			I implemented the RandomWalk robot's step method, but did not bother comparing it with the standard robot
+	Lecture 15: Statistical Thinking
+	Lecture 16: Using randomness to solve non-random problems
+	Lecture 17: Curve fitting
+		Lecture 15-17 were largely about statistical topics rather than computer science ones, so they were skipped
+		These lectures teach you how to build programmatic models from existing data
+		These lectures can be useful if you need to prove that a devised model accurately describes the data for the situation its modeling, i.e. if the model and the program running the model is good
+		You build models that fit data so you can use the model to answer questions about theoretical data points
+			e.g. Build a model that describes the flight of an arrow based on previous data
+			So, how high would the arrow have to go to reach a speed to destroy a target?
+			Ask the model, then aim for that height
+		Solving real world problems with computation
+			1. Start with an experiment and collect the data
+			2. Use computation to find and evaluate a model using the data
+			3. Use theory + analysis + computation to derive a consequence of the model
+	Lecture 18: Optimization Problems and Algorithms
+		Finished previous lecture
+		Optimization Problems
+			1. An objective function
+				A function returning a minimum or a maximum
+				e.g. Minimum bus fare for Boston-New York, Maximum income for my job
+			2. A set of constraints
+				Rules on what the function can return
+				e.g. Minimum bus fare for Boston-New York, but less than 8 hour travel time
+				Maximum income for my job, but only performed in Michigan
+			Problem Reduction - map a problem to an existing problem with a known solution
+			Many optimization problems have no computational solution, so an approximation is found instead
+			Example: Knapsack Problem or 0/1 Knapsack problem
+				Burglar is robbing a house with his napsack, must take whole item, thus the 0/1
+				Continuous Napsack problem would use barrels of gold dust or silver dust
+				How can he steal the maximum amount of value without overloading his napsack and breaking his back?
+				Formal Description
+					1. Item is <item, weight>
+					2. w is max weight
+					3. I is vector of available items
+					4. V indicates whether Item has been taken from I, if V[i] == 1, then I[i] has been taken, if 0, not taken
+					Goal: Maximize Σ V[i] * I[i].value (Σ means sum or aggregate or for each item in I)
+				Solutions
+					Greedy Algorithm - iterative, pick locally optimal solution at each step
+						Ways to apply it to Napsack Problem:
+							Each step: Put most expensive thing in napsack, check weight, not too heavy? Next step
+							Each step: Put lightest thing in napsack, check weight, no too heavy? Next step
+							Each step: Put highest value:weight item in napsack, check weight, not too heavy? Next step
+						None of these Greedy Algorithms will be perfect in every case for 0/1 Knapsack problem
+						However, they work perfectly for continous Knapsack problem
+						Work best when you have a good test for locally optimal
+					Brute Force - enumerate all possibilities, pick most valuable knapsack under the weight
+						Guaranteed to give the best outcome
+						How long will it take to run?
+							How many possible Vs are there?
+							2^n, because if you think of V like a binary number: [0 1 0 1 1 0 1 1 1] of the same length as I
+		Problem Set - Stochastic simulation of patient and virus population dynamics
+			Skipped because of relation to statistical material
+	Lecture 21 - Graphs to Model Problems
+		First 30 minutes covers K-means testing function and close out Machine Learning
+		Graph Theory
+			Graph - set of nodes (or vertices) connected by a set of edges (or arcs)
+			If the edges are unidirectional (one-way), it's a directed graph or digraph
+			Euler and Konigsberg bridges
+				Konigsberg is at the intersection of two rivers, lots of islands
+				Citizens debated if you could walk around the city and only cross each bridge once
+				Euler presented the problem as a graph
+				Determined that you could visit an island using all of it's bridges only if it had an even number of bridges
+					i.e. Only nodes with two edges can be visited
+					Didn't apply to the first and the last nodes
+					Unfortunately, every island in Konigsberg had three bridges connected to it
+				Edges can have weights, e.g. the number of miles between two cities, toll prices on roads
+			When designing class hierarchies, the more specialized classes should be lower on the hierarchy
+				e.g A Graph class should inherit from a Digraph class because a Graph is more specialized, with multi-directional edges
+				A graph can be represented in the same hierarchy, without the need for special edges, simply by copying and reversing each edge
+				Adding constraints tends to make more general forms, so constrained classes should be higher in the hierarchy
+			Data structures to represent Digraphs
+				Adjacency Matrix
+					Graph with N nodes
+					N x N matrix
+					Each value in the matrix represents and edge
+					Each value is a weight (weighted edges) or a boolean (regular edges)
+					Causes some difficulty when there are multiple edges between nodes - may need to fill the Matrix with objects to handle complexity
+				Adjacency List
+					For every node, list all of the edges connected to it
+				Matrix is best for dense connections, everything is connected to everything else
+				List is best for sparse connections, because of a sparse Matrix
+				Implementation of lecture is an adjacency list
+			
+	Lecture 22 - Graphs to Model Problems pt 2
+		Problems to solve with Graphs
+			Shortest path
+				For some pair of nodes, n1 n2, find shortest sequence of edges for the two nodes
+				Solution Algorithms
+					Recursive depth-first search
+						base case: starting node == ending node
+						recursive case: find child of node until...
+							you reach the node you're looking for
+							you reach a node with no children
+							you reach a node you've already seen - avoid cycles
+						back track after finding the correct node
+						create new visited list each time, so as recursion unravels the lists are accurate to the recursive depth
+						Exponential complexity: Θ(c^n)
+						Requires to do the same work more than once,
+							Ex. Start point a, finish point e
+									a
+								   / \
+								  b   c
+								   \ /
+									d
+									|
+									e
+							When testing b and c, you have to retest d-e twice
+							Use memoization: remember d is best way to get to e, once you get to d, you have answer
+			Shortest weighted path
+				--, find least weighty sequence of edges for the two nodes
+			Find cliques
+				Find set of nodes so there is an edge between each node in the set
+			Minimum Cut problem
+				Given a graph and two sets of nodes, find minimum number of edges to cut to create two graphs
+				Useful for planning power lines
+				Could use to cut off enemy transport by blowing up minimum number of bridges
+			TB outbreak
+				Find patient 0
+					Is there a node that has the disease and is connected with every node that has the disease?
+					For a simple graph, you could find candidates for patient 0 this way
+					To be more precise, it's necessary to add weights to include the date/time the patient contracted the disease
+				Stop spread of disease
+					Do a minimum cut to separate diseased people from people without disease, and vacinate the node on each or one side of the cut
+		Memoization and Dynamic Programming
+		Fun 'yuuuuge' around 41:00-44:00
+		When can we use Dynamic Programming?
+			Problems must have optimal substructure
+				Find globally optimal solution by combining locally optimal solutions
+				Allows you to know that solving all the local problems will solve the global problem
+			Problems must have overlapping sub problems
+				Using memoization, you can look up a solution rather than computing it
+				Eliminates the need to resolve previously solved local problems
+	Lecture 23 - Dynamic Programming
+		Optimal Substructure
+			Merge sort exhibit optimal substructure
+			Conversely, if you solve a global problem, all the local problems are in the global solution
+				Ex, looking for shortest bath between a and v
+				Shortest path is a - b - c - q - t - v
+				Also know shortest path between b and t or b and q or q and v
+		Overlapping sub problems
+		Speeding up the 0/1 Knapsack problem
+			Build a decision tree, treat it like a graph
+				Decision trees naturally exhibit optimal substructure
+				However, less apparent is overlapping sub problems
+					In the Knapsack problem, you re-visit solved problems when
+						You're considering the same set of items to take
+						You have the same amount of weight remaining
+						What you've already picked up is not relevant to getting the maximum value from what's remaining
+			Do a depth first search
+			Use memoization to store locally solved problems
+			A good way to think about memoization in dynamic programming:
+				If you're solving a problem recursively, store tuples of the arguments for the recursive function as keys in a dictionary
+				Before recursing, check the dictionary for the arguments you're going to recurse with, and grab the solution if it's there
+				Otherwise, recurse
+				So in the iteration vs. recursion debate, recursion seems to have an advantage in dynamic programming
+			Pretty good advice about python around 25:00
+				If you use mutable values in python default parameters, then you can break recursive functions
+				If the mutable value changes and you recursively call the function without the parameter in question, then it will use the variable from the top level call, which could have changed from the original parameter used to call the function
+				So don't use mutable values as default parameters
+			sys.setrecursionlimit in python needs to be set for larger problems
+			How do you calculate the complexity of this solution?
+				Memo lookup is Θ(1), or constant
+				So the question is how many memo keys have to be computed until the memo has all the solutions?
+					Keys in the memo: items to consider, available weight remaining
+					Possible keys = possible number of items to choose from X possible value of avail
+						items is governed by total number of items
+						avail is governed by different weights and items, an exponential measurement
+				So the complexity is pseudo-polynomial
+				It's polynomial for any number of items, but if possible weights is large, reverts back to an exponential complexity
+					
+			
+
+		
+		
+
+
+
+					
+				
+				
+			
+
